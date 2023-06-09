@@ -1,10 +1,10 @@
-import Image from 'next/image'
-import Auth from '../components/Auth';
+'use client'
+import Scores from '../components/Scores';
 
 export default function Home() {
-  return (
-    <>
-    <Auth/>
-    </>
-  )
+	return (
+		<>
+		<Scores />
+		</>
+	)
 }
