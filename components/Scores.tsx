@@ -3,7 +3,7 @@ import { db } from '../utils/firebase/config';
 import { useState, useEffect } from 'react';
 import { getDocs, collection } from "firebase/firestore";
 
-export default function Header() {
+export default function Scores() {
 
     const [ scores, setScores ] = useState<any[]>([]);
 
@@ -29,14 +29,14 @@ export default function Header() {
 
     let scoresList = scores.map((person: any)=> {
 		return (
-            <div key={person.id}>
-                <div className="capitalize">{person.name}</div>
-                <div>{person.score}</div>
+            <div className="flex justify-between" key={person.id}>
+                <span className="capitalize mr-2">{person.name}</span>
+                <span>{person.score}</span>
             </div>
         )
 	});
 
 	return (
-        <div>{scoresList}</div>
+        <div className="grid grid-cols-6">{scoresList}</div>
 	)
 }

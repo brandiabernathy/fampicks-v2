@@ -17,7 +17,7 @@ export default function Auth() {
 	}
 
 	return (
-		<div className="fixed top-0 right-0 bottom-0 left-0">
+		<div className="fixed top-0 right-0 bottom-0 left-0 z-20">
 			<div className="absolute top-0 right-0 bottom-0 left-0 bg-slate-600 opacity-70"></div>
 			<div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 w-96 overflow-y-auto">
 				<form className="relative bg-white rounded p-8 drop-shadow">

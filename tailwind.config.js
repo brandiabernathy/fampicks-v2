@@ -11,10 +11,11 @@ module.exports = {
       padding: '2rem',
     },
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      gridTemplateColumns: {
+        'game': '1fr 20px 48px 20px 1fr',
+      },
+      maxWidth: {
+        '8xl': '90rem',
       },
     },
   },
