@@ -1,6 +1,7 @@
 import Image from 'next/image';
+import { Game } from '../types';
 
-export default function Game(props) {
+export default function Game(props: Game) {
 
 	return (
         <div className="flex text-base shadow-md rounded-lg relative w-full">
