@@ -4,8 +4,16 @@ import { auth } from "../utils/firebase/config";
 import { db } from '../utils/firebase/config';
 import { collection, addDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { useUserContext } from '../context/user';
 
-export default function Auth({ type, onClose }) {
+interface AuthProps {
+	type: string;
+	onClose: () => void;
+  }
+
+export default function Auth({ type, onClose }: AuthProps) {
+	const { user, setUser } = useUserContext();
+
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
 	const [ fname, setFname ] = useState('');
@@ -15,8 +23,8 @@ export default function Auth({ type, onClose }) {
 
 	const signUp = async () => {
 		try {
-			let user = await createUserWithEmailAndPassword(auth, email, password);
-			addUser(user.user.uid);
+			let newUser = await createUserWithEmailAndPassword(auth, email, password);
+			addUser(newUser.user.uid);
 			onClose();
 		}
 		catch(err) {
@@ -27,14 +35,19 @@ export default function Auth({ type, onClose }) {
 	const signIn = async () => {
 		setErrorMsg('');
 		try {
-			let user = await signInWithEmailAndPassword(auth, email, password);
+			let existingUser = await signInWithEmailAndPassword(auth, email, password);
+			console.log('existing user', existingUser);
+			setUser(existingUser.user.uid);
 			onClose();
 		}
-		catch(err) {
-			console.error(err);
-			if(err.message == 'Firebase: Error (auth/user-not-found).') {
-				console.log('not found!');
-				setErrorMsg('Sorry, your account could not be found.');
+		catch(err: unknown) {
+			if(err instanceof Error) {
+				if(err.message == 'Firebase: Error (auth/user-not-found).') {
+					setErrorMsg('Sorry, your account could not be found.');
+				}
+				else if(err.message == 'Firebase: Error (auth/wrong-password).') {
+					setErrorMsg("Oops! That's the wrong password.");
+				}
 			}
 		}
 	}
@@ -77,7 +90,7 @@ export default function Auth({ type, onClose }) {
 							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</div>
-					<div className="mb-10">
+					<div className="mb-6">
 						<label className="text-gray-500 block mb-2">Password</label>
 						<input
 							className="border rounded w-full py-2 px-3"
@@ -87,7 +100,7 @@ export default function Auth({ type, onClose }) {
 							onChange={(e) => setPassword(e.target.value)}
 						/>
 					</div>
-					{ errorMsg && <div className="text-rose-600 mb-10">{errorMsg}</div> }
+					{ errorMsg && <div className="text-rose-600 mb-6">{errorMsg}</div> }
 					<button
 						className="px-4 py-2 rounded-full w-full bg-teal-600 hover:bg-teal-800 text-white"
 						type="button"
