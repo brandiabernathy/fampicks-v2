@@ -1,9 +1,9 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth } from "../utils/firebase/config";
 import { db } from '../utils/firebase/config';
 import { collection, addDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useUserContext } from '../context/user';
 
 interface AuthProps {
@@ -20,6 +20,12 @@ export default function Auth({ type, onClose }: AuthProps) {
 	const [ errorMsg, setErrorMsg ] = useState('');
 
 	const usersCollectionRef = collection(db, "users");
+
+	console.log('auth.currentUser ???', auth.currentUser);
+
+	useEffect(() => {
+		// signOut(auth);
+	}, [])
 
 	const signUp = async () => {
 		try {
