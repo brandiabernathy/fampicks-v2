@@ -47,10 +47,3 @@ export interface Game {
         broadcast: string,
     }
 }
-
-
-export interface Games {
-    games: object[],
-    venue?: string,
-    name?: string,
-}

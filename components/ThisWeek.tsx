@@ -1,11 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useUserContext } from '../context/user';
 import dayjs from 'dayjs';
 import Game from './Game';
 import MakePicks from './MakePicks';
 
+
 export default function ThisWeek() {
-    const [games, setGames] = useState([]);
+	const { user } = useUserContext();
+    const [ games, setGames ] = useState([]);
     const [ showModal, setShowModal ] = useState(false);
 
     const closeModal = () => {
@@ -32,7 +35,6 @@ export default function ThisWeek() {
 			});
 	}, []);
 
-    console.log("games", games);
     let gamesList = games.map((game: any)=> {
 		return <Game key={game.id} game={game} />
 	});
@@ -42,7 +44,7 @@ export default function ThisWeek() {
         <>
             <div className="flex justify-between items-center mb-3">
                 <h2 className="text-xl">This Week's Games</h2>
-                <button className="bg-teal-600 text-white px-4 py-2 rounded-full" onClick={() => setShowModal(true)}>Make my picks</button>
+                {user && <button className="bg-teal-600 text-white px-4 py-2 rounded-full" onClick={() => setShowModal(true)}>Make my picks</button>}
             </div>
             <div className="grid gap-3 grid-cols-4">{gamesList}</div>
             {showModal && <MakePicks games={games} onClose={closeModal}/>}
