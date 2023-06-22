@@ -23,10 +23,6 @@ export default function Auth({ type, onClose }: AuthProps) {
 
 	console.log('auth.currentUser ???', auth.currentUser);
 
-	useEffect(() => {
-		// signOut(auth);
-	}, [])
-
 	const signUp = async () => {
 		try {
 			let newUser = await createUserWithEmailAndPassword(auth, email, password);
@@ -42,7 +38,6 @@ export default function Auth({ type, onClose }: AuthProps) {
 		setErrorMsg('');
 		try {
 			let existingUser = await signInWithEmailAndPassword(auth, email, password);
-			console.log('existing user', existingUser);
 			setUser(existingUser.user.uid);
 			onClose();
 		}

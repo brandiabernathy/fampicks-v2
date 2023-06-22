@@ -20,10 +20,10 @@ export default function MakePicks({ games, onClose }) {
             team: team,
         }
 
-        if(picks.some(function(el){ return el.game === game})) {
+        if(picks.some(function(el){ return el['game'] === game})) {
             // remove current pick for game and add new one
             var array = [...picks];
-            let index = array.findIndex(item => item.game === game);
+            let index = array.findIndex(item => item['game'] === game);
             array.splice(index, 1);
             console.log("array", array);
             array.push(newPick);
