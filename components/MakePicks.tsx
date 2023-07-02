@@ -1,15 +1,13 @@
 'use client'
 import { useState } from "react";
 import { db } from '../utils/firebase/config';
-import { collection, addDoc, getDoc, setDoc, doc } from "firebase/firestore";
+import { getDoc, setDoc, doc, updateDoc } from "firebase/firestore";
 import { useAppContext } from '../context/app';
 
 export default function MakePicks({ games, onClose }) {
     const { user, week } = useAppContext();
     const [ picks, setPicks ] = useState([]);
     const [ errorMsg, setErrorMsg ] = useState('');
-
-    const picksCollectionRef = collection(db, "picks");
 
     console.log("week", week);
 
@@ -40,18 +38,25 @@ export default function MakePicks({ games, onClose }) {
         else {
             setErrorMsg('');
             try {
-                // await addDoc(picksCollectionRef, {userId: user, picks: picks, week: 1});
                 const userPicks = await getDoc(doc(db, 'picks', user.id));
+                const picksRef = doc(db, "picks", user.id);
 
                 if(!userPicks.data()) {
                     // if user has not made any picks yet, create a new doc in the picks collection
+                    // and add their picks to it
                     await setDoc(doc(db, "picks", user.id), {
-                        week: week,
-                        picks: picks,
+                        [week]: {
+                            picks: picks
+                        },
                     });
                 }
                 else {
                     // update their picks collection with the new picks
+                    await updateDoc(picksRef, {
+                        [week]: {
+                            picks: picks
+                        },
+                    });
                 }
             }
             catch(err) {
