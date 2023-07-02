@@ -1,8 +1,8 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { auth } from "../utils/firebase/config";
 import { db } from '../utils/firebase/config';
-import { collection, addDoc } from "firebase/firestore";
+import { getDoc, setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useUserContext } from '../context/user';
 
@@ -19,9 +19,6 @@ export default function Auth({ type, onClose }: AuthProps) {
 	const [ fname, setFname ] = useState('');
 	const [ errorMsg, setErrorMsg ] = useState('');
 
-	const usersCollectionRef = collection(db, "users");
-
-	console.log('auth.currentUser ???', auth.currentUser);
 
 	const signUp = async () => {
 		try {
@@ -38,7 +35,11 @@ export default function Auth({ type, onClose }: AuthProps) {
 		setErrorMsg('');
 		try {
 			let existingUser = await signInWithEmailAndPassword(auth, email, password);
-			setUser(existingUser.user.uid);
+
+			// find the user doc
+			const user = await getDoc(doc(db, 'users', existingUser.user.uid))
+			setUser(user.data());
+
 			onClose();
 		}
 		catch(err: unknown) {
@@ -55,7 +56,11 @@ export default function Auth({ type, onClose }: AuthProps) {
 
 	const addUser = async (userId: string) => {
 		try {
-			await addDoc(usersCollectionRef, {id: userId, name: fname});
+			// create a new doc in the users table with the same document ID as the uid
+			// in the authentication table
+			await setDoc(doc(db, "users", userId), {
+				name: fname,
+			  });
 		}
 		catch(err) {
 			console.error(err);

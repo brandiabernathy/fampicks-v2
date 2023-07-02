@@ -13,37 +13,45 @@ export default function ThisWeek() {
 	const { user } = useUserContext();
     const [ games, setGames ] = useState([]);
     const [ showModal, setShowModal ] = useState(false);
+	const [ week, setWeek] = useState('');
+	const [ startDate, setStartDate] = useState('');
+	const [ endDate, setEndtDate] = useState('');
 
     const closeModal = () => {
         setShowModal(false);
     }
 
-	// figure out what week it is
-	const weekNumbers = Object.keys(weeks);
-	const today = dayjs().format('YYYYMMDD');
-	let current_week;
+    useEffect(() => {
+		// figure out what week it is
+		const weekNumbers = Object.keys(weeks);
+		const today = dayjs().format('YYYYMMDD');
+		let current_week;
 
-	// if today is before the first week start date
-	if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
-		current_week = 1;
-	}
-	else {
-		for(let i = 0; i < weekNumbers.length -1; i++) {
-			//if today is in between the start and end dates
-			if(dayjs(today).isBetween(weeks[weekNumbers[i]].start_date, weeks[weekNumbers[i+1]].start_date) || today == weeks[weekNumbers[i]].start_date) {
-				current_week = i+1;
-			}
-			else if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
-				current_week = 1;
+		// if today is before the first week start date
+		if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
+			current_week = 1;
+			setStartDate(weeks[weekNumbers[0]].start_date);
+			setEndtDate(weeks[weekNumbers[0]].end_date);
+		}
+		else {
+			for(let i = 0; i < weekNumbers.length -1; i++) {
+				//if today is in between the start and end dates
+				if(dayjs(today).isBetween(weeks[weekNumbers[i]].start_date, weeks[weekNumbers[i+1]].start_date) || today == weeks[weekNumbers[i]].start_date) {
+					current_week = i+1;
+					setStartDate(weeks[weekNumbers[i+1]].start_date);
+					setEndtDate(weeks[weekNumbers[i+1]].end_date);
+				}
+				else if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
+					current_week = 1;
+				}
 			}
 		}
-	}
-
-    useEffect(() => {
-		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=20230831-20230906&groups=8')
+		console.log('start date', startDate);
+		console.log('end date', endDate);
+		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + startDate + '-' + endDate + '&groups=8')
 			.then((res) => res.json())
 			.then((data) => {
-                // console.log("data", data);
+                console.log("data", data);
 				setGames(data.events
 				.sort((a: any, b: any) => a.date < b.date ? -1 : 1)
 				.map((game: any) => ({
@@ -54,7 +62,7 @@ export default function ThisWeek() {
 					away: game.competitions[0].competitors[1],
 					home_rank: game.competitions[0].competitors[0].curatedRank,
 					away_rank: game.competitions[0].competitors[1].curatedRank,
-                    broadcast: game.competitions[0].broadcasts[0].names[0],
+                    broadcast: game.competitions[0].broadcasts.length ? game.competitions[0].broadcasts[0].names[0] : '',
 				})))
 			});
 	}, []);
