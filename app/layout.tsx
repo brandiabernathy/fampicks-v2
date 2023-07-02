@@ -2,7 +2,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { Poppins } from 'next/font/google';
 import Header from '../components/Header';
-import { UserContextProvider } from '../context/user';
+import { AppContextProvider } from '../context/app';
 
 const inter = Inter({ subsets: ['latin'] })
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '600'] })
@@ -20,14 +20,14 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 	  		<body className={poppins.className}>
-			  	<UserContextProvider>
+			  	<AppContextProvider>
 					<Header />
 					<main className=" py-10">
 						<div className="container max-w-8xl">
 							{children}
 						</div>
 					</main>
-				</UserContextProvider>
+				</AppContextProvider>
 			</body>
 		</html>
   	)

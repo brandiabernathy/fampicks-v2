@@ -4,7 +4,7 @@ import { auth } from "../utils/firebase/config";
 import { db } from '../utils/firebase/config';
 import { getDoc, setDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { useUserContext } from '../context/user';
+import { useAppContext } from '../context/app';
 
 interface AuthProps {
 	type: string;
@@ -12,7 +12,7 @@ interface AuthProps {
   }
 
 export default function Auth({ type, onClose }: AuthProps) {
-	const { user, setUser } = useUserContext();
+	const { user, setUser } = useAppContext();
 
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
@@ -60,6 +60,7 @@ export default function Auth({ type, onClose }: AuthProps) {
 			// in the authentication table
 			await setDoc(doc(db, "users", userId), {
 				name: fname,
+				id: userId,
 			  });
 		}
 		catch(err) {

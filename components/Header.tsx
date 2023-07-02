@@ -2,11 +2,11 @@
 import { useState } from 'react';
 import Auth from './Auth';
 import { auth } from "../utils/firebase/config";
-import { useUserContext } from '../context/user';
+import { useAppContext } from '../context/app';
 import { signOut } from "firebase/auth";
 
 export default function Header() {
-    const { user, setUser } = useUserContext();
+    const { user, setUser } = useAppContext();
     const [ showModal, setShowModal ] = useState(false);
     const [ modalType, setModalType ] = useState('');
 

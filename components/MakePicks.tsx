@@ -1,17 +1,17 @@
 'use client'
 import { useState } from "react";
 import { db } from '../utils/firebase/config';
-import { collection, addDoc } from "firebase/firestore";
-import { useUserContext } from '../context/user';
+import { collection, addDoc, getDoc, setDoc, doc } from "firebase/firestore";
+import { useAppContext } from '../context/app';
 
 export default function MakePicks({ games, onClose }) {
-    const { user } = useUserContext();
+    const { user, week } = useAppContext();
     const [ picks, setPicks ] = useState([]);
     const [ errorMsg, setErrorMsg ] = useState('');
 
-    console.log('user', user);
-
     const picksCollectionRef = collection(db, "picks");
+
+    console.log("week", week);
 
     function makeSelection(game: string, team: string) {
 
@@ -25,12 +25,10 @@ export default function MakePicks({ games, onClose }) {
             var array = [...picks];
             let index = array.findIndex(item => item['game'] === game);
             array.splice(index, 1);
-            console.log("array", array);
             array.push(newPick);
             setPicks(array);
         }
         else {
-            console.log('a team for this game has NOT been selected');
             setPicks(prevState => [...prevState, newPick]);
         }
     }
@@ -42,7 +40,19 @@ export default function MakePicks({ games, onClose }) {
         else {
             setErrorMsg('');
             try {
-                await addDoc(picksCollectionRef, {userId: user, picks: picks, week: 1});
+                // await addDoc(picksCollectionRef, {userId: user, picks: picks, week: 1});
+                const userPicks = await getDoc(doc(db, 'picks', user.id));
+
+                if(!userPicks.data()) {
+                    // if user has not made any picks yet, create a new doc in the picks collection
+                    await setDoc(doc(db, "picks", user.id), {
+                        week: week,
+                        picks: picks,
+                    });
+                }
+                else {
+                    // update their picks collection with the new picks
+                }
             }
             catch(err) {
                 console.error(err);
