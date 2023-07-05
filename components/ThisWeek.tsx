@@ -48,6 +48,7 @@ export default function ThisWeek() {
 
 	useEffect(() => {
 		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + startDate + '-' + endDate + '&groups=8')
+		// fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=20220915-20221001&groups=8')
 			.then((res) => res.json())
 			.then((data) => {
                 console.log("data", data);

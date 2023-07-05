@@ -18,8 +18,10 @@ export default function Game(props: Game) {
                 </div>}
                 <div className="slash bg-slate-300 opacity-50 w-5 h-16 absolute -right-2.5 skew-y-[-82deg]"></div>
             </div>
-            { props.game.status.type.completed && <div className="absolute">{props.game.status.type.shortDetail}</div> }
-            <div className="absolute left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 bg-slate-600 text-white px-2 py-1 text-sm z-10">{props.game.date} - {props.game.broadcast}</div>
+            <div className="absolute left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 bg-slate-600 text-white px-2 py-1 text-sm z-10">
+                { props.game.status.type.description == 'Scheduled' && <span>{props.game.date} - {props.game.broadcast}</span> }
+                { props.game.status.type.completed && <span>{props.game.status.type.shortDetail}</span>}
+            </div>
             <div className="flex py-3 pr-4 w-1/2 justify-end items-center bg-slate-300 rounded-r-lg relative overflow-hidden">
                 <div className="slash bg-white opacity-50 w-5 h-16 absolute -left-2.5 skew-y-[-82deg]"></div>
                 {props.game.status.type.description != 'Scheduled' && <div className="text-4xl pl-24 text-white">
@@ -30,7 +32,7 @@ export default function Game(props: Game) {
                     alt={props.game.home.team.location}
                     width={44}
                     height={44}
-                    className="ml-2"
+                    className="ml-3"
                 />
             </div>
         </div>

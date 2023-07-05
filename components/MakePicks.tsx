@@ -11,11 +11,12 @@ export default function MakePicks({ games, onClose }) {
 
     console.log("week", week);
 
-    function makeSelection(game: string, team: string) {
+    function makeSelection(game: string, team: string, teamName: string) {
 
         let newPick = {
             game: game,
             team: team,
+            teamName: teamName,
         }
 
         if(picks.some(function(el){ return el['game'] === game})) {
@@ -75,7 +76,7 @@ export default function MakePicks({ games, onClose }) {
                     { games.map((game: any) => {
                         return (
                             <div className="flex gap-8 relative w-full my-5" key={game.id}>
-                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.away.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(game.id, game.away.id)}>
+                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.away.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(game.id, game.away.id, game.away.team.location)}>
                                     <div className="text-xs mb-1">
                                         <div className="text-slate-500">Away</div>
                                         <div className="font-bold">{game.away.team.displayName}</div>
@@ -91,7 +92,7 @@ export default function MakePicks({ games, onClose }) {
                                         </div>}
                                     </div>
                                 </div>
-                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.home.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(game.id, game.home.id)}>
+                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.home.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(game.id, game.home.id, game.home.team.location)}>
                                     <div className="text-xs text-right mb-1">
                                         <div className="text-slate-500">Home</div>
                                         <div className="font-bold">{game.home.team.displayName}</div>
