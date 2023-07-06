@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 import Scores from '../components/Scores';
 import ThisWeek from '../components/ThisWeek';
-import Picks from '../components/Picks';
 import { db } from '../utils/firebase/config';
 import { auth } from "../utils/firebase/config";
 import { useAppContext } from '../context/app';
@@ -30,7 +29,6 @@ export default function Home() {
 		<>
 		{/* <Scores /> */}
 		<ThisWeek />
-		<Picks />
 		</>
 	)
 }

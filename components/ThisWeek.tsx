@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAppContext } from '../context/app';
 import dayjs from 'dayjs';
 import Game from './Game';
+import Picks from './Picks';
 import MakePicks from './MakePicks';
 import weeks from '../utils/weeks';
 var isBetween = require('dayjs/plugin/isBetween')
@@ -79,6 +80,8 @@ export default function ThisWeek() {
                 {user && <button className="bg-teal-600 text-white px-4 py-2 rounded-full" onClick={() => setShowModal(true)}>Make my picks</button>}
             </div>
             <div className="grid gap-3 grid-cols-4">{gamesList}</div>
+			<h2 className="text-xl mt-5 mb-3">This Week's Picks</h2>
+			<Picks />
             {showModal && <MakePicks games={games} onClose={closeModal}/>}
         </>
 	)
