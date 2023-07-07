@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { auth } from "../utils/firebase/config";
 import { db } from '../utils/firebase/config';
-import { getDoc, setDoc, doc } from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useAppContext } from '../context/app';
 
@@ -22,8 +22,7 @@ export default function Auth({ type, onClose }: AuthProps) {
 
 	const signUp = async () => {
 		try {
-			let newUser = await createUserWithEmailAndPassword(auth, email, password);
-			addUser(newUser.user.uid);
+			await createUserWithEmailAndPassword(auth, email, password);
 			onClose();
 		}
 		catch(err) {
@@ -51,20 +50,6 @@ export default function Auth({ type, onClose }: AuthProps) {
 					setErrorMsg("Oops! That's the wrong password.");
 				}
 			}
-		}
-	}
-
-	const addUser = async (userId: string) => {
-		try {
-			// create a new doc in the users table with the same document ID as the uid
-			// in the authentication table
-			await setDoc(doc(db, "users", userId), {
-				name: fname,
-				id: userId,
-			  });
-		}
-		catch(err) {
-			console.error(err);
 		}
 	}
 
