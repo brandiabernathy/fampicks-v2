@@ -14,14 +14,12 @@ export default function Picks() {
 		try {
 			const picks = await getDocs(collection(db, "picks"));
             picks.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data()[week].picks);
+                // get everyone's pics
                 let object = {
                     user: doc.id,
                     picks: doc.data()[week].picks,
                 }
                 setWeeklyPicks(prevState => [...prevState, object]);
-                console.log('weekly picks', weeklyPicks);
             });
 		}
 
@@ -32,7 +30,9 @@ export default function Picks() {
 
     useEffect(() => {
         getPicks();
+        console.log('get pickss');
     }, [week])
+
 
 	return (
 		<div className="">
@@ -40,12 +40,12 @@ export default function Picks() {
                 return (
                     <div key={item.user} className="mb-2">
                         <div className="font-bold">{item.user}</div>
-                            { item.picks.map((pick: any) => {
-                                return (
-                                    <span key={pick.game} className="border-slate-300 border-r-2 pr-2 mr-2 last:border-0">{pick.teamName}</span>
-                                )
-                            })}
-                        </div>
+                        { item.picks.map((pick: any) => {
+                            return (
+                                <span key={pick.game} className="border-slate-300 border-r-2 pr-2 mr-2 last:border-0">{pick.teamName}</span>
+                            )
+                        })}
+                    </div>
                 )
             })}
 		</div>

@@ -5,47 +5,18 @@ import dayjs from 'dayjs';
 import Game from './Game';
 import Picks from './Picks';
 import MakePicks from './MakePicks';
-import weeks from '../utils/weeks';
 var isBetween = require('dayjs/plugin/isBetween')
 dayjs.extend(isBetween)
 
 
-export default function ThisWeek() {
-	const { user, week, setWeek } = useAppContext();
+export default function ThisWeek({ startDate, endDate }) {
+	const { user, week } = useAppContext();
     const [ games, setGames ] = useState([]);
     const [ showModal, setShowModal ] = useState(false);
-	const [ startDate, setStartDate] = useState('');
-	const [ endDate, setEndtDate] = useState('');
 
     const closeModal = () => {
         setShowModal(false);
     }
-
-    useEffect(() => {
-		// figure out what week it is
-		const weekNumbers = Object.keys(weeks);
-		const today = dayjs().format('YYYYMMDD');
-
-		// if today is before the first week start date
-		if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
-			setWeek(1);
-			setStartDate(weeks[weekNumbers[0]].start_date);
-			setEndtDate(weeks[weekNumbers[0]].end_date);
-		}
-		else {
-			for(let i = 0; i < weekNumbers.length -1; i++) {
-				//if today is in between the start and end dates
-				if(dayjs(today).isBetween(weeks[weekNumbers[i]].start_date, weeks[weekNumbers[i+1]].start_date) || today == weeks[weekNumbers[i]].start_date) {
-					setWeek(i+1);
-					setStartDate(weeks[weekNumbers[i+1]].start_date);
-					setEndtDate(weeks[weekNumbers[i+1]].end_date);
-				}
-				else if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
-					setWeek(1);
-				}
-			}
-		}
-	}, []);
 
 	useEffect(() => {
 		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + startDate + '-' + endDate + '&groups=8')

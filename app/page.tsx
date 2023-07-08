@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Scores from '../components/Scores';
 import ThisWeek from '../components/ThisWeek';
 import { db } from '../utils/firebase/config';
@@ -7,9 +7,15 @@ import { auth } from "../utils/firebase/config";
 import { useAppContext } from '../context/app';
 import { onAuthStateChanged } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
+import dayjs from 'dayjs';
+import weeks from '../utils/weeks';
+var isBetween = require('dayjs/plugin/isBetween')
+dayjs.extend(isBetween)
 
 export default function Home() {
-	const { user, setUser } = useAppContext();
+	const { user, setUser, setWeek } = useAppContext();
+	const [ startDate, setStartDate] = useState('');
+	const [ endDate, setEndtDate] = useState('');
 
 	useEffect(() => {
 		onAuthStateChanged(auth, (user) => {
@@ -25,10 +31,37 @@ export default function Home() {
 		setUser(user.data());
 	}
 
+
+	useEffect(() => {
+		// figure out what week it is
+		const weekNumbers = Object.keys(weeks);
+		const today = dayjs().format('YYYYMMDD');
+
+		// if today is before the first week start date
+		if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
+			setWeek(1);
+			setStartDate(weeks[weekNumbers[0]].start_date);
+			setEndtDate(weeks[weekNumbers[0]].end_date);
+		}
+		else {
+			for(let i = 0; i < weekNumbers.length -1; i++) {
+				//if today is in between the start and end dates
+				if(dayjs(today).isBetween(weeks[weekNumbers[i]].start_date, weeks[weekNumbers[i+1]].start_date) || today == weeks[weekNumbers[i]].start_date) {
+					setWeek(i+1);
+					setStartDate(weeks[weekNumbers[i+1]].start_date);
+					setEndtDate(weeks[weekNumbers[i+1]].end_date);
+				}
+				else if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
+					setWeek(1);
+				}
+			}
+		}
+	}, []);
+
 	return (
 		<>
 		{/* <Scores /> */}
-		<ThisWeek />
+		<ThisWeek startDate={startDate} endDate={endDate}/>
 		</>
 	)
 }
