@@ -9,7 +9,7 @@ export default function MakePicks({ games, onClose }) {
     const [ picks, setPicks ] = useState([]);
     const [ errorMsg, setErrorMsg ] = useState('');
 
-    console.log("week", week);
+    // console.log("week", week);
 
     function makeSelection(game: string, team: string, teamName: string) {
 

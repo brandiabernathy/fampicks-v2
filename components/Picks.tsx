@@ -8,8 +8,6 @@ export default function Picks() {
     const { week } = useAppContext();
     const [weeklyPicks, setWeeklyPicks] = useState([]);
 
-    console.log("week", week);
-
     const getPicks = async () => {
 		try {
 			const picks = await getDocs(collection(db, "picks"));
@@ -30,7 +28,8 @@ export default function Picks() {
 
     useEffect(() => {
         getPicks();
-        console.log('get pickss');
+        console.log('get picks');
+        console.log("week", week);
     }, [week])
 
 
