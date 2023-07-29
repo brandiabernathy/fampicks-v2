@@ -10,7 +10,7 @@ export default function Header() {
     const [ showModal, setShowModal ] = useState(false);
     const [ modalType, setModalType ] = useState('');
 
-    console.log('user', user);
+    console.log('header user', user);
 
     const closeModal = () => {
         setShowModal(false);
@@ -31,11 +31,11 @@ export default function Header() {
             <header className="shadow-md bg-white flex flex-center">
                 <div className="flex items-center justify-between container max-w-8xl py-5">
                     <h1 className="text-2xl">Fampicks</h1>
-                    {!user.id && <div>
+                    {!user.uid && <div>
                         <button className="bg-white border text-slate-400 px-4 py-2 rounded-full mr-4" onClick={() => showCorrectModal('signIn')}>Sign in</button>
                         <button className="bg-teal-600 text-white px-4 py-2 rounded-full" onClick={() => showCorrectModal('signUp')}>Sign up</button>
                     </div>}
-                    {user.id && <div className="flex items-center">
+                    {user.uid && <div className="flex items-center">
                         <div>{user.name}</div>
                         <button className="bg-white border text-slate-400 px-4 py-2 rounded-full ml-4" onClick={() => logOut()}>Sign Out</button>
                     </div>

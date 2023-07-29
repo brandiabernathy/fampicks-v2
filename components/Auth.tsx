@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { auth } from "../utils/firebase/config";
 import { db } from '../utils/firebase/config';
-import { getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useAppContext } from '../context/app';
 
@@ -22,7 +22,12 @@ export default function Auth({ type, onClose }: AuthProps) {
 
 	const signUp = async () => {
 		try {
-			await createUserWithEmailAndPassword(auth, email, password);
+			let newUser = await createUserWithEmailAndPassword(auth, email, password);
+			const userRef = doc(db, 'users', newUser.user.uid);
+			await updateDoc(userRef, {
+				name: fname,
+			});
+			setUser({uid: newUser.user.uid, name: fname});
 			onClose();
 		}
 		catch(err) {

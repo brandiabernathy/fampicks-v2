@@ -21,8 +21,8 @@ export default function ThisWeek({ weekDates }) {
 
 	const getGames = () => {
 		// console.log('get games');
-		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + weekDates.start + '-' + weekDates.end + '&groups=8')
-		// fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=20220915-20221001&groups=8')
+		// fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + weekDates.start + '-' + weekDates.end + '&groups=8')
+		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=20220915-20221001&groups=8')
 			.then((res) => res.json())
 			.then((data) => {
                 console.log("data", data);

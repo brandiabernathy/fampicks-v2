@@ -39,13 +39,13 @@ export default function MakePicks({ games, onClose }) {
         else {
             setErrorMsg('');
             try {
-                const userPicks = await getDoc(doc(db, 'picks', user.id));
-                const picksRef = doc(db, "picks", user.id);
+                const userPicks = await getDoc(doc(db, 'picks', user.uid));
+                const picksRef = doc(db, "picks", user.uid);
 
                 if(!userPicks.data()) {
                     // if user has not made any picks yet, create a new doc in the picks collection
                     // and add their picks to it
-                    await setDoc(doc(db, "picks", user.id), {
+                    await setDoc(doc(db, "picks", user.uid), {
                         [week]: {
                             picks: picks
                         },
