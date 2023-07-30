@@ -42,6 +42,8 @@ export interface Game {
                 completed: boolean,
                 description: string,
                 shortDetail: string,
+                period: Number,
+                displayClock: string,
             }
         }
         broadcast: string,
