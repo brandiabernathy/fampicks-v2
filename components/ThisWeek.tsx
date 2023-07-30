@@ -21,8 +21,8 @@ export default function ThisWeek({ weekDates }) {
 
 	const getGames = () => {
 		// console.log('get games');
-		// fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + weekDates.start + '-' + weekDates.end + '&groups=8')
-		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=20220915-20221001&groups=8')
+		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + weekDates.start + '-' + weekDates.end + '&groups=8')
+		// fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=20220915-20221001&groups=8')
 			.then((res) => res.json())
 			.then((data) => {
                 console.log("data", data);
@@ -37,24 +37,28 @@ export default function ThisWeek({ weekDates }) {
 					away: game.competitions[0].competitors[1],
 					home_rank: game.competitions[0].competitors[0].curatedRank,
 					away_rank: game.competitions[0].competitors[1].curatedRank,
-                    broadcast: game.competitions[0].broadcasts.length ? game.competitions[0].broadcasts[0].names[0] : '',
+					broadcast: game.competitions[0].broadcasts.length ? game.competitions[0].broadcasts[0].names[0] : '',
 				})))
-
-				// const today = dayjs('2023-08-26 23:30:01').utc(true);
-				const today = dayjs();
-				if(dayjs(today).isAfter(games[0].date_long)) {
-					// if first game of week has started, disable the picks button
-					setDisableButton(true);
-				}
-				else {
-					setDisableButton(false);
-				}
-			});
+			})
 	}
 
 	useEffect(() => {
 		getGames();
 	}, []);
+
+	useEffect(() => {
+		if(games.length) {
+			// const today = dayjs('2023-08-26 23:30:01').utc(true);
+			const today = dayjs();
+			if(dayjs(today).isAfter(games[0].date_long)) {
+				// if first game of week has started, disable the picks button
+				setDisableButton(true);
+			}
+			else {
+				setDisableButton(false);
+			}
+		}
+	}, [games]);
 
     let gamesList = games.map((game: any)=> {
 		return <Game key={game.id} game={game} />

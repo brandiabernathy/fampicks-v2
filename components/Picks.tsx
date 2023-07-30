@@ -14,7 +14,8 @@ export default function Picks() {
             picks.forEach((doc) => {
                 // get everyone's pics
                 let object = {
-                    user: doc.id,
+                    uid: doc.id,
+                    name: doc.data().name,
                     picks: doc.data()[week].picks,
                 }
                 setWeeklyPicks(prevState => [...prevState, object]);
@@ -28,8 +29,8 @@ export default function Picks() {
 
     useEffect(() => {
         getPicks();
-        console.log('get picks');
-        console.log("week", week);
+        // console.log('get picks');
+        // console.log("week", week);
     }, [week])
 
 
@@ -38,7 +39,7 @@ export default function Picks() {
             { weeklyPicks.map((item: any) => {
                 return (
                     <div key={item.user} className="mb-2">
-                        <div className="font-bold">{item.user}</div>
+                        <div className="font-bold">{item.name}</div>
                         { item.picks.map((pick: any) => {
                             return (
                                 <span key={pick.game} className="border-slate-300 border-r-2 pr-2 mr-2 last:border-0">{pick.teamName}</span>

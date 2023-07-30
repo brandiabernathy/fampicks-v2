@@ -10,7 +10,7 @@ export default function Header() {
     const [ showModal, setShowModal ] = useState(false);
     const [ modalType, setModalType ] = useState('');
 
-    console.log('header user', user);
+    // console.log('header user', user);
 
     const closeModal = () => {
         setShowModal(false);

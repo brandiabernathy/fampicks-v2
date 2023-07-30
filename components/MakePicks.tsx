@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from '../utils/firebase/config';
 import { getDoc, setDoc, doc, updateDoc } from "firebase/firestore";
 import { useAppContext } from '../context/app';
@@ -9,16 +9,29 @@ export default function MakePicks({ games, onClose }) {
     const [ picks, setPicks ] = useState([]);
     const [ errorMsg, setErrorMsg ] = useState('');
 
-    // console.log("week", week);
+    const getUserPicks = async () => {
+         // see if user has already made picks for current week, and load them
+         try {
+             const userPicks = await getDoc(doc(db, 'picks', user.uid));
+             if(userPicks.data()[week]) {
+                setPicks(userPicks.data()[week].picks);
+             }
+         }
+         catch(err) {
+             console.error(err);
+         }
+    }
+
+    useEffect(() => {
+       getUserPicks();
+    }, [])
 
     function makeSelection(game: string, team: string, teamName: string) {
-
         let newPick = {
             game: game,
             team: team,
             teamName: teamName,
         }
-
         if(picks.some(function(el){ return el['game'] === game})) {
             // remove current pick for game and add new one
             var array = [...picks];
@@ -46,6 +59,7 @@ export default function MakePicks({ games, onClose }) {
                     // if user has not made any picks yet, create a new doc in the picks collection
                     // and add their picks to it
                     await setDoc(doc(db, "picks", user.uid), {
+                        name: user.name,
                         [week]: {
                             picks: picks
                         },
@@ -59,6 +73,7 @@ export default function MakePicks({ games, onClose }) {
                         },
                     });
                 }
+                onClose();
             }
             catch(err) {
                 console.error(err);
