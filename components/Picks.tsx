@@ -12,11 +12,12 @@ export default function Picks() {
 		try {
 			const picks = await getDocs(collection(db, "picks"));
             picks.forEach((doc) => {
-                // get everyone's pics
+                // get everyone's picks
                 let object = {
                     uid: doc.id,
                     name: doc.data().name,
                     picks: doc.data()[week].picks,
+                    score: doc.data()[week].score,
                 }
                 setWeeklyPicks(prevState => [...prevState, object]);
             });
@@ -39,7 +40,7 @@ export default function Picks() {
             { weeklyPicks.map((item: any) => {
                 return (
                     <div key={item.user} className="mb-2">
-                        <div className="font-bold">{item.name}</div>
+                        <div className="font-bold">{item.name} - {item.score}</div>
                         { item.picks.map((pick: any) => {
                             return (
                                 <span key={pick.game} className="border-slate-300 border-r-2 pr-2 mr-2 last:border-0">{pick.teamName}</span>

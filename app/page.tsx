@@ -30,6 +30,7 @@ export default function Home() {
 		setUser(user.data());
 	}
 
+	// console.log('week', week);
 
 	useEffect(() => {
 		// figure out what week it is
@@ -37,22 +38,22 @@ export default function Home() {
 		const today = dayjs().format('YYYYMMDD');
 
 		// if today is before the first week start date
-		if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
+		// if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
 			setWeek(1);
 			setWeekDates({start: weeks[weekNumbers[0]].start_date, end: weeks[weekNumbers[0]].end_date})
-		}
-		else {
-			for(let i = 0; i < weekNumbers.length -1; i++) {
-				//if today is in between the start and end dates
-				if(dayjs(today).isBetween(weeks[weekNumbers[i]].start_date, weeks[weekNumbers[i+1]].start_date) || today == weeks[weekNumbers[i]].start_date) {
-					setWeek(i+1);
-					setWeekDates({start: weeks[weekNumbers[i+1]].start_date, end: weeks[weekNumbers[i+1]].end_date})
-				}
-				else if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
-					setWeek(1);
-				}
-			}
-		}
+		// }
+		// else {
+		// 	for(let i = 0; i < weekNumbers.length -1; i++) {
+		// 		//if today is in between the start and end dates
+		// 		if(dayjs(today).isBetween(weeks[weekNumbers[i]].start_date, weeks[weekNumbers[i+1]].start_date) || today == weeks[weekNumbers[i]].start_date) {
+		// 			setWeek(i+1);
+		// 			setWeekDates({start: weeks[weekNumbers[i+1]].start_date, end: weeks[weekNumbers[i+1]].end_date})
+		// 		}
+		// 		else if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
+		// 			setWeek(1);
+		// 		}
+		// 	}
+		// }
 	}, []);
 
 	return (

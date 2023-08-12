@@ -47,5 +47,6 @@ export interface Game {
             }
         }
         broadcast: string,
+        winner: string,
     }
 }
