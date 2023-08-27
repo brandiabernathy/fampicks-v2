@@ -20,6 +20,7 @@ export default function Game(props: Game) {
             </div>
             <div className="absolute left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 bg-slate-600 text-white px-2 py-1 text-sm z-10">
                 { props.game.status.type.description == 'Scheduled' && <span>{props.game.date} {props.game.broadcast &&  <span>- {props.game.broadcast}</span>}</span> }
+                { props.game.status.type.description == 'Delayed' && <span>Delayed</span>}
                 { props.game.status.type.description == 'In Progress' && <span>Q{ props.game.status.period } { props.game.status.displayClock } {props.game.broadcast &&  <span>- {props.game.broadcast}</span>}</span> }
                 { props.game.status.type.completed && <span>{props.game.status.type.shortDetail}</span>}
             </div>

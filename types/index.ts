@@ -38,13 +38,13 @@ export interface Game {
             }
         },
         status: {
+            period: number,
+            displayClock: string,
             type: {
                 completed: boolean,
                 description: string,
                 shortDetail: string,
-                period: Number,
-                displayClock: string,
-            }
+            },
         }
         broadcast: string,
         winner: string,
