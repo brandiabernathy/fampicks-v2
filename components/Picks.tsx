@@ -37,7 +37,7 @@ export default function Picks() {
 		<div className="flex">
             { weeklyPicks.map((item: any) => {
                 return (
-                    <div key={item.user} className="lg:w-1/6">
+                    <div key={item.uid} className="lg:w-1/6">
                         <div className="font-bold">{item.name} - {item.score}</div>
                         { item.picks.map((pick: any) => {
                             return (

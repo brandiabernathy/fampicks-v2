@@ -23,15 +23,27 @@ export default function Auth({ type, onClose }: AuthProps) {
 	const signUp = async () => {
 		try {
 			let newUser = await createUserWithEmailAndPassword(auth, email, password);
-			const userRef = doc(db, 'users', newUser.user.uid);
-			await updateDoc(userRef, {
-				name: fname,
-			});
 			setUser({uid: newUser.user.uid, name: fname});
 			onClose();
+
+			setTimeout(() => {
+				update(newUser.user.uid);
+			}, 2000)
 		}
 		catch(err) {
 			console.error(err);
+		}
+	}
+
+	const update = async (uid) => {
+		try {
+			const userRef = doc(db, 'users', uid);
+			await updateDoc(userRef, {
+				name: fname,
+			});
+		}
+		catch(err) {
+			console.log(err);
 		}
 	}
 
