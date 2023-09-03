@@ -24,7 +24,11 @@ export default function MakePicks({ games, onClose }) {
 
     useEffect(() => {
        getUserPicks();
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        console.log('picks', picks);
+    },[picks])
 
     function makeSelection(game: string, team: string, teamName: string) {
         let newPick = {
@@ -86,7 +90,7 @@ export default function MakePicks({ games, onClose }) {
 			<div className="absolute top-0 right-0 bottom-0 left-0 bg-slate-600 opacity-70"></div>
 			<div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 w-[600px] overflow-y-auto max-h-96">
                 <div className="relative bg-white rounded p-8 drop-shadow">
-                <h2 className="text-2xl">Make your picks for Week 1</h2>
+                <h2 className="text-2xl">Make your picks for Week {week}</h2>
                 <div className="absolute right-4 top-2 text-xl cursor-pointer text-gray-300 z-10" onClick={onClose}>&times;</div>
                     { games.map((game: any) => {
                         return (
@@ -98,7 +102,7 @@ export default function MakePicks({ games, onClose }) {
                                     </div>
                                     <div className="rounded-lg text-center p-10 relative" style={{ backgroundColor: `#${game.away.team.color}`}}>
                                         <div className="text-white font-bold text-2xl">
-                                            { game.away_rank && <span>#{game.away_rank.current}</span> }
+                                            { game.away_rank.current != 99 && <span>#{game.away_rank.current}</span> }
                                             <span className="ml-2">{game.away.team.abbreviation}</span>
                                         </div>
                                         {picks.findIndex(item => item.team === game.away.id) > -1 && 
@@ -114,7 +118,7 @@ export default function MakePicks({ games, onClose }) {
                                     </div>
                                     <div className="rounded-lg text-center p-10 relative" style={{ backgroundColor: `#${game.home.team.color}`}}>
                                         <div className="text-white font-bold text-2xl">
-                                            { game.home_rank && <span>#{game.home_rank.current}</span> }
+                                            { game.home_rank.current != 99 && <span>#{game.home_rank.current}</span> }
                                             <span className="ml-2">{game.home.team.abbreviation}</span>
                                         </div>
                                         {picks.findIndex(item => item.team === game.home.id) > -1 && 

@@ -90,13 +90,13 @@ export default function ThisWeek({ weekDates }) {
 		if(games.length) {
 			// const today = dayjs('2023-08-26 23:30:01').utc(true);
 			const today = dayjs();
-			// if(dayjs(today).isAfter(games[0].date_long)) {
-			// 	// if first game of week has started, disable the picks button
-			// 	setDisableButton(true);
-			// }
-			// else {
-			// 	setDisableButton(false);
-			// }
+			if(dayjs(today).isAfter(games[0].date_long)) {
+				// if first game of week has started, disable the picks button
+				setDisableButton(true);
+			}
+			else {
+				setDisableButton(false);
+			}
 		}
 	}, [games]);
 
@@ -107,12 +107,12 @@ export default function ThisWeek({ weekDates }) {
 
 	return (
         <>
-            <div className="flex justify-between items-center mb-3">
-                <h2 className="text-xl">This Week's Games</h2>
+            <div className="lg:flex justify-between items-center mb-3">
+                <h2 className="text-xl">This Week's Games - Week {week}</h2>
                 {user && <button className={"text-white px-4 py-2 rounded-full " + (disableButton ? 'pointer-events-none opacity-50 bg-slate-600' : 'bg-teal-600')} onClick={() => setShowModal(true)}>Make my picks</button>}
 				{user.name == 'Brandi' && <button className={"text-white px-4 py-2 rounded-full " + (disableButton ? 'pointer-events-none opacity-50 bg-slate-600' : 'bg-teal-600')} onClick={() => calculateScores()}>Calculate scores</button>}
             </div>
-            <div className="grid gap-3 grid-cols-4">{gamesList}</div>
+            <div className="grid gap-3 lg:grid-cols-4">{gamesList}</div>
 			<h2 className="text-xl mt-5 mb-3">This Week's Picks</h2>
 			<Picks />
             {showModal && <MakePicks games={games} onClose={closeModal}/>}

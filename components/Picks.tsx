@@ -30,20 +30,18 @@ export default function Picks() {
 
     useEffect(() => {
         getPicks();
-        // console.log('get picks');
-        // console.log("week", week);
     }, [week])
 
 
 	return (
-		<div className="">
+		<div className="flex">
             { weeklyPicks.map((item: any) => {
                 return (
-                    <div key={item.user} className="mb-2">
+                    <div key={item.user} className="lg:w-1/6">
                         <div className="font-bold">{item.name} - {item.score}</div>
                         { item.picks.map((pick: any) => {
                             return (
-                                <span key={pick.game} className="border-slate-300 border-r-2 pr-2 mr-2 last:border-0">{pick.teamName}</span>
+                                <div key={pick.game}>{pick.teamName}</div>
                             )
                         })}
                     </div>
