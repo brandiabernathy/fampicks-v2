@@ -17,22 +17,15 @@ export default function Home() {
 	const [ weekDates, setWeekDates ] = useState({ start: '', end: ''});
 
 	useEffect(() => {
+		//see if a user is already signed in
 		onAuthStateChanged(auth, (user) => {
-			// user is signed in
 			if (user) {
 				getUser(user.uid);
 			}
-		  });
-    }, []);
+		});
 
-	const getUser = async (userId) => {
-		const user = await getDoc(doc(db, 'users', userId))
-		setUser(user.data());
-	}
 
-	// console.log('week', week);
 
-	useEffect(() => {
 		// figure out what week it is
 		const weekNumbers = Object.keys(weeks);
 		const today = dayjs().format('YYYYMMDD');
@@ -54,7 +47,16 @@ export default function Home() {
 				// }
 			}
 		}
-	}, []);
+    }, []);
+
+	const getUser = async (userId) => {
+		const docRef = doc(db, "users", userId);
+		const user = await getDoc(docRef);
+		if (user.exists()) {
+			// not a brand new user
+			setUser(user.data());
+		  }
+	}
 
 	return (
 		<>
