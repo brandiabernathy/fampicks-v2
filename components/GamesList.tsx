@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useAppContext } from '../context/app';
 import dayjs from 'dayjs';
 import Game from './Game';
-import Picks from './Picks';
 import MakePicks from './MakePicks';
 import { db } from '../utils/firebase/config';
 import { getDocs, collection, doc, updateDoc } from "firebase/firestore";
@@ -59,7 +58,6 @@ export default function ThisWeek({ weekDates }) {
 	const getGames = () => {
 		// console.log('get games');
 		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + weekDates.start + '-' + weekDates.end + '&groups=8')
-		// fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=20220912-20220918&groups=8')
 			.then((res) => res.json())
 			.then((data) => {
                 console.log("games data", data);
@@ -91,7 +89,7 @@ export default function ThisWeek({ weekDates }) {
 			const today = dayjs();
 			if(dayjs(today).isAfter(games[0].date_long)) {
 				// if first game of week has started, disable the picks button
-				setDisableButton(true);
+				// setDisableButton(true);
 			}
 		}
 	}, [games]);
@@ -108,9 +106,7 @@ export default function ThisWeek({ weekDates }) {
                 {user && <button className={"text-white px-4 py-2 rounded-full " + (disableButton ? 'pointer-events-none opacity-50 bg-slate-600' : 'bg-teal-600')} onClick={() => setShowModal(true)}>Make my picks</button>}
 				{user.name == 'Brandi' && <button className={"text-white px-4 py-2 rounded-full " + (disableButton ? 'pointer-events-none opacity-50 bg-slate-600' : 'bg-teal-600')} onClick={() => calculateScores()}>Calculate scores</button>}
             </div>
-            <div className="grid gap-3 lg:grid-cols-4">{gamesList}</div>
-			<h2 className="text-xl mt-5 mb-3">This Week's Picks</h2>
-			<Picks />
+            <div className="grid gap-3 lg:grid-cols-3">{gamesList}</div>
             {showModal && <MakePicks games={games} onClose={closeModal}/>}
         </>
 	)

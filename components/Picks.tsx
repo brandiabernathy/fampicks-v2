@@ -11,15 +11,18 @@ export default function Picks() {
     const getPicks = async () => {
 		try {
 			const picks = await getDocs(collection(db, "picks"));
+            // get everyone's picks
             picks.forEach((doc) => {
-                // get everyone's picks
-                let object = {
-                    uid: doc.id,
-                    name: doc.data().name,
-                    picks: doc.data()[week].picks,
-                    score: doc.data()[week].score,
+                // check to see if user has made picks for this week yet
+                if(doc.data()[week]) {
+                    let userObject = {
+                        uid: doc.id,
+                        name: doc.data().name,
+                        picks: doc.data()[week].picks,
+                        score: doc.data()[week].score,
+                    }
+                    setWeeklyPicks(prevState => [...prevState, userObject]);
                 }
-                setWeeklyPicks(prevState => [...prevState, object]);
             });
 		}
 
@@ -34,19 +37,22 @@ export default function Picks() {
 
 
 	return (
-		<div className="flex">
-            { weeklyPicks.map((item: any) => {
-                return (
-                    <div key={item.uid} className="lg:w-1/6">
-                        <div className="font-bold">{item.name} - {item.score}</div>
-                        { item.picks.map((pick: any) => {
-                            return (
-                                <div key={pick.game}>{pick.teamName}</div>
-                            )
-                        })}
-                    </div>
-                )
-            })}
-		</div>
+        <>
+            <h2 className="text-xl mb-5">This Week's Picks</h2>
+            <div className="flex">
+                { weeklyPicks.map((item: any) => {
+                    return (
+                        <div key={item.uid} className="lg:w-1/6">
+                            <div className="font-bold">{item.name} {item.score && <span>- {item.score} </span>}</div>
+                            { item.picks.map((pick: any) => {
+                                return (
+                                    <div key={pick.game}>{pick.teamName}</div>
+                                )
+                            })}
+                        </div>
+                    )
+                })}
+            </div>
+        </>
 	)
 }

@@ -16,6 +16,7 @@ export default function Scores() {
                 ...doc.data(),
                 id: doc.id,
             })))
+            console.log('filteredData', filteredData);
             setScores(filteredData);
         }
         catch(err) {
@@ -37,6 +38,9 @@ export default function Scores() {
 	});
 
 	return (
-        <div className="grid grid-cols-6">{scoresList}</div>
+        <div className="shadow-md rounded-lg p-8">
+            <h2 className="text-xl mb-5">Standings</h2>
+            {scoresList}
+        </div>
 	)
 }

@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import Scores from '../components/Scores';
 import ThisWeek from '../components/ThisWeek';
+import GamesList from '../components/GamesList';
+import Picks from '../components/Picks';
 import { db } from '../utils/firebase/config';
 import { auth } from "../utils/firebase/config";
 import { useAppContext } from '../context/app';
@@ -60,8 +62,15 @@ export default function Home() {
 
 	return (
 		<>
-		{/* <Scores /> */}
-		{ weekDates.start && <ThisWeek weekDates={weekDates} /> }
+			<div className="flex justify-between mb-6">
+				<div className="w-3/4">
+					{ weekDates.start && <GamesList weekDates={weekDates} /> }
+				</div>
+				<div className="w-1/5">
+					<Scores />
+				</div>
+			</div>
+			<Picks />
 		</>
 	)
 }
