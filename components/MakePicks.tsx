@@ -30,8 +30,9 @@ export default function MakePicks({ games, onClose }) {
         console.log('picks', picks);
     },[picks])
 
-    function makeSelection(game: string, team: string, teamName: string) {
+    function makeSelection(index: Number, game: string, team: string, teamName: string) {
         let newPick = {
+            id: index,
             game: game,
             team: team,
             teamName: teamName,
@@ -92,10 +93,10 @@ export default function MakePicks({ games, onClose }) {
                 <div className="relative bg-white rounded p-8 drop-shadow">
                 <h2 className="text-2xl">Make your picks for Week {week}</h2>
                 <div className="absolute right-4 top-2 text-xl cursor-pointer text-gray-300 z-10" onClick={onClose}>&times;</div>
-                    { games.map((game: any) => {
+                    { games.map((game: any, index: any) => {
                         return (
                             <div className="flex gap-8 relative w-full my-5" key={game.id}>
-                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.away.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(game.id, game.away.id, game.away.team.location)}>
+                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.away.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(index, game.id, game.away.id, game.away.team.location)}>
                                     <div className="text-xs mb-1">
                                         <div className="text-slate-500">Away</div>
                                         <div className="font-bold">{game.away.team.displayName}</div>
@@ -111,7 +112,7 @@ export default function MakePicks({ games, onClose }) {
                                         </div>}
                                     </div>
                                 </div>
-                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.home.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(game.id, game.home.id, game.home.team.location)}>
+                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.home.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(index, game.id, game.home.id, game.home.team.location)}>
                                     <div className="text-xs text-right mb-1">
                                         <div className="text-slate-500">Home</div>
                                         <div className="font-bold">{game.home.team.displayName}</div>

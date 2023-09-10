@@ -44,11 +44,14 @@ export default function Picks() {
                     return (
                         <div key={item.uid} className="lg:w-1/6">
                             <div className="font-bold">{item.name} {item.score && <span>- {item.score} </span>}</div>
-                            { item.picks.map((pick: any) => {
+                            { item.picks && item.picks
+                                .sort((a: any, b: any) => a.id - b.id)
+                                .map((pick: any) => {
                                 return (
                                     <div key={pick.game}>{pick.teamName}</div>
                                 )
-                            })}
+                                })
+                            }
                         </div>
                     )
                 })}
