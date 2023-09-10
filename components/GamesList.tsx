@@ -73,7 +73,7 @@ export default function ThisWeek({ weekDates }) {
 					home_rank: game.competitions[0].competitors[0].curatedRank,
 					away_rank: game.competitions[0].competitors[1].curatedRank,
 					broadcast: game.competitions[0].broadcasts.length ? game.competitions[0].broadcasts[0].names[0] : '',
-					winner: game.status.type.detail == 'Final' ?
+					winner: game.status.type.description == 'Final' ?
 											(game.competitions[0].competitors[0].winner ? game.competitions[0].competitors[0].id : game.competitions[0].competitors[1].id) : '',
 				})))
 			})
