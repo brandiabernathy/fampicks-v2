@@ -30,7 +30,8 @@ export default function Home() {
 
 		// figure out what week it is
 		const weekNumbers = Object.keys(weeks);
-		const today = dayjs().format('YYYYMMDD');
+		// const today = dayjs().format('YYYYMMDD');
+		const today = dayjs('20230920').format('YYYYMMDD');
 
 		// if today is before the first week start date
 		if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {

@@ -4,6 +4,7 @@ import { useAppContext } from '../context/app';
 import dayjs from 'dayjs';
 import Game from './Game';
 import MakePicks from './MakePicks';
+import PickGames from './PickGames';
 import { db } from '../utils/firebase/config';
 import { getDocs, collection, doc, updateDoc } from "firebase/firestore";
 var utc = require('dayjs/plugin/utc')
@@ -14,6 +15,7 @@ export default function ThisWeek({ weekDates }) {
 	const { user, week } = useAppContext();
     const [ games, setGames ] = useState([]);
     const [ showModal, setShowModal ] = useState(false);
+	const [ showGamesModal, setShowGamesModal ] = useState(false);
 	const [ disableButton, setDisableButton ] = useState(false);
 	const [ allPicks, setAllPicks ] = useState([]);
 	const picksCollectionRef = collection(db, "picks");
@@ -35,6 +37,7 @@ export default function ThisWeek({ weekDates }) {
 
     const closeModal = () => {
         setShowModal(false);
+		setShowGamesModal(false);
     }
 
 	const calculateScores = async() => {
@@ -105,9 +108,11 @@ export default function ThisWeek({ weekDates }) {
                 <h2 className="text-xl">This Week's Games - Week {week}</h2>
                 {user && <button className={"text-white px-4 py-2 rounded-full " + (disableButton ? 'pointer-events-none opacity-50 bg-slate-600' : 'bg-teal-600')} onClick={() => setShowModal(true)}>Make my picks</button>}
 				{user.name == 'Brandi' && <button className={"text-white px-4 py-2 rounded-full " + (disableButton ? 'pointer-events-none opacity-50 bg-slate-600' : 'bg-teal-600')} onClick={() => calculateScores()}>Calculate scores</button>}
+				{user.name == 'Rudy' && <button className={"text-white px-4 py-2 rounded-full " + (disableButton ? 'pointer-events-none opacity-50 bg-slate-600' : 'bg-teal-600')} onClick={() => setShowGamesModal(true)}>Pick extra games</button>}
             </div>
             <div className="grid gap-3 lg:grid-cols-3">{gamesList}</div>
             {showModal && <MakePicks games={games} onClose={closeModal}/>}
+			{showGamesModal && <PickGames onClose={closeModal}/>}
         </>
 	)
 }

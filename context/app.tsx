@@ -16,7 +16,7 @@ const AppContext = createContext({});
 
 export const AppContextProvider = ({ children }: any) => {
     const [user, setUser] = useState({});
-    const [week, setWeek] = useState(0);
+    const [week, setWeek] = useState('');
 
     return (
         <AppContext.Provider value={{ user, setUser, week, setWeek }}>

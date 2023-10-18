@@ -9,6 +9,7 @@ export default function Picks() {
     const [weeklyPicks, setWeeklyPicks] = useState([]);
 
     const getPicks = async () => {
+        console.log('week', week);
 		try {
 			const picks = await getDocs(collection(db, "picks"));
             // get everyone's picks
