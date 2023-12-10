@@ -10,34 +10,28 @@ export default function PickGames({ onClose }) {
     const { user, week } = useAppContext();
     const [ games, setGames ] = useState([]);
     const [ errorMsg, setErrorMsg ] = useState('');
-    const [ selectedConference, setSelectedConference ] = useState('');
 
-    const conferences = [
-        {
-            id: 9,
-            name: 'Pac-12',
-            logo: '/pac12-logo.svg'
-        },
-        {
-            id: 4,
-            name: 'Big 12',
-            logo: '/big12-logo.svg'
-        },
-        {
-            id: 5,
-            name: 'Big Ten',
-            logo: '/bigten-logo.svg'
-        },
-    ];
+    useEffect(() => {
+        getTopGames();
+    }, [])
+
+    useEffect(() => {
+        console.log('games', games);
+    }, [games])
 
 
-    const getConferenceGames = () => {
-		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=20231016-20231023&groups=' + selectedConference)
-			.then((res) => res.json())
+    const getTopGames = () => {
+        fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=20231016-20231023')
+        .then((res) => res.json())
 			.then((data) => {
-                console.log("gamessss data", data);
 				setGames(data.events
 				.sort((a: any, b: any) => a.date < b.date ? -1 : 1)
+                //filter out games where team does not have a Top 25 ranking and are not in the SEC
+                .filter((game: any) => (game.competitions[0].competitors[0].curatedRank.current <= 25
+                                        || game.competitions[0].competitors[1].curatedRank.current <= 25) &&
+                                        (game.competitions[0].competitors[0].team.conferenceId != 8
+                                        || game.competitions[0].competitors[1].team.conferenceId != 8))
+
 				.map((game: any) => ({
 					id: game.id,
 					date_long: game.date,
@@ -46,15 +40,7 @@ export default function PickGames({ onClose }) {
 					away: game.competitions[0].competitors[1],
 				})))
 			})
-            console.log("games", games);
-	}
-
-    useEffect(() => {
-        console.log('selected conference', selectedConference);
-        if(selectedConference) {
-            getConferenceGames();
-        }
-    }, [selectedConference])
+    }
 
 
 	return (
@@ -62,22 +48,7 @@ export default function PickGames({ onClose }) {
 			<div className="absolute top-0 right-0 bottom-0 left-0 bg-slate-600 opacity-70"></div>
 			<div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 w-[600px] overflow-y-auto max-h-96">
                 <div className="relative bg-white rounded p-8 drop-shadow">
-                    <h2 className="text-2xl">Pick the games for Week {week}</h2>
-                    <p>Which conference would you like to pick from?</p>
-                    { conferences.map((conference: any) => {
-                        return (
-                            <div key={conference.id}>
-                                <Image
-                                    src={conference.logo}
-                                    alt={conference.name}
-                                    width={144}
-                                    height={144}
-                                    className="mr-3"
-                                    onClick={() => setSelectedConference(conference.id)}
-                                />
-                            </div>
-                        )
-                    })}
+                    <h2 className="text-2xl">Pick the extra games for Week {week}</h2>
                     <div className="grid">
                         { games.map((game: any, index: any) => {
                             return (
