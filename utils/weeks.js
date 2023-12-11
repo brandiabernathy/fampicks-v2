@@ -57,14 +57,10 @@ const weeks = {
     },
     14: {
         start_date: '20231128',
-        end_date: '20231204'
+        end_date: '20231203'
     },
-    15: {
-        start_date: '20231205',
-        end_date: '20231211'
-    },
-    'bowls': {
-        start_date: '20231212',
+    99: {
+        start_date: '20231204',
         end_date: '20240109',
     }
 };

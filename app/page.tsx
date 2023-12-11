@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
 import Scores from '../components/Scores';
-import ThisWeek from '../components/ThisWeek';
 import GamesList from '../components/GamesList';
 import Picks from '../components/Picks';
 import { db } from '../utils/firebase/config';
@@ -30,13 +29,18 @@ export default function Home() {
 
 		// figure out what week it is
 		const weekNumbers = Object.keys(weeks);
-		// const today = dayjs().format('YYYYMMDD');
-		const today = dayjs('20230920').format('YYYYMMDD');
+		const today = dayjs().format('YYYYMMDD');
+		// const today = dayjs('20230920').format('YYYYMMDD');
 
 		// if today is before the first week start date
 		if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
 			setWeek(0);
 			setWeekDates({start: weeks[weekNumbers[0]].start_date, end: weeks[weekNumbers[0]].end_date})
+		}
+		// if today is after the last regular week
+		else if(dayjs(today).isAfter(weeks[weekNumbers[14]].end_date)) {
+			setWeek(99);
+			setWeekDates({start: weeks[weekNumbers[15]].start_date, end: weeks[weekNumbers[15]].end_date})
 		}
 		else {
 			for(let i = 0; i < weekNumbers.length -1; i++) {
@@ -45,14 +49,11 @@ export default function Home() {
 					setWeek(i);
 					setWeekDates({start: weeks[weekNumbers[i]].start_date, end: weeks[weekNumbers[i]].end_date})
 				}
-				// else if(dayjs(today).isBefore(weeks[weekNumbers[0]].start_date)) {
-				// 	setWeek(1);
-				// }
 			}
 		}
     }, []);
 
-	const getUser = async (userId) => {
+	const getUser = async (userId: any) => {
 		const docRef = doc(db, "users", userId);
 		const user = await getDoc(docRef);
 		if (user.exists()) {

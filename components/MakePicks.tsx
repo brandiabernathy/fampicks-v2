@@ -96,7 +96,10 @@ export default function MakePicks({ games, onClose }) {
                     { games.map((game: any, index: any) => {
                         return (
                             <div className="flex gap-8 relative w-full my-5" key={game.id}>
-                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.away.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(index, game.id, game.away.id, game.away.team.location)}>
+                                <div
+                                    className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.away.id) === -1) ? ' opacity-50' : '')} 
+                                    onClick={() => makeSelection(index, game.id, game.away.id, game.away.team.location)}
+                                >
                                     <div className="text-xs mb-1">
                                         <div className="text-slate-500">Away</div>
                                         <div className="font-bold">{game.away.team.displayName}</div>
@@ -106,13 +109,16 @@ export default function MakePicks({ games, onClose }) {
                                             { game.away_rank.current != 99 && <span>#{game.away_rank.current}</span> }
                                             <span className="ml-2">{game.away.team.abbreviation}</span>
                                         </div>
-                                        {picks.findIndex(item => item.team === game.away.id) > -1 && 
+                                        {picks.findIndex(item => item.team === game.away.id) > -1 &&
                                         <div className="absolute h-8 w-8 bottom-4 right-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                                            <div className="w-2 h-4 rotate-45 border-r-2 border-b-2 border-white"></div> 
+                                            <div className="w-2 h-4 rotate-45 border-r-2 border-b-2 border-white"></div>
                                         </div>}
                                     </div>
                                 </div>
-                                <div className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.home.id) === -1) ? ' opacity-50' : '')} onClick={() => makeSelection(index, game.id, game.home.id, game.home.team.location)}>
+                                <div
+                                    className={"w-1/2 cursor-pointer" + ((picks.findIndex(item => item.game === game.id) > -1 && picks.findIndex(item =>item.team === game.home.id) === -1) ? ' opacity-50' : '')}
+                                    onClick={() => makeSelection(index, game.id, game.home.id, game.home.team.location)}
+                                >
                                     <div className="text-xs text-right mb-1">
                                         <div className="text-slate-500">Home</div>
                                         <div className="font-bold">{game.home.team.displayName}</div>
@@ -122,9 +128,9 @@ export default function MakePicks({ games, onClose }) {
                                             { game.home_rank.current != 99 && <span>#{game.home_rank.current}</span> }
                                             <span className="ml-2">{game.home.team.abbreviation}</span>
                                         </div>
-                                        {picks.findIndex(item => item.team === game.home.id) > -1 && 
+                                        {picks.findIndex(item => item.team === game.home.id) > -1 &&
                                          <div className="absolute h-8 w-8 bottom-4 right-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                                            <div className="w-2 h-4 rotate-45 border-r-2 border-b-2 border-white"></div> 
+                                            <div className="w-2 h-4 rotate-45 border-r-2 border-b-2 border-white"></div>
                                         </div>
                                         }
                                     </div>

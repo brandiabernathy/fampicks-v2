@@ -11,7 +11,7 @@ var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc);
 
 
-export default function ThisWeek({ weekDates }) {
+export default function GamesList({ weekDates }) {
 	const { user, week } = useAppContext();
     const [ games, setGames ] = useState([]);
     const [ showModal, setShowModal ] = useState(false);
@@ -59,27 +59,55 @@ export default function ThisWeek({ weekDates }) {
 	}
 
 	const getGames = () => {
-		// console.log('get games');
-		fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + weekDates.start + '-' + weekDates.end + '&groups=8')
-			.then((res) => res.json())
-			.then((data) => {
-                console.log("games data", data);
-				setGames(data.events
-				.sort((a: any, b: any) => a.date < b.date ? -1 : 1)
-				.map((game: any) => ({
-					id: game.id,
-					date_long: game.date,
-					date: dayjs(game.date).format('M/D h:mmA'),
-					status: game.status,
-					home: game.competitions[0].competitors[0],
-					away: game.competitions[0].competitors[1],
-					home_rank: game.competitions[0].competitors[0].curatedRank,
-					away_rank: game.competitions[0].competitors[1].curatedRank,
-					broadcast: game.competitions[0].broadcasts.length ? game.competitions[0].broadcasts[0].names[0] : '',
-					winner: game.status.type.description == 'Final' ?
-											(game.competitions[0].competitors[0].winner ? game.competitions[0].competitors[0].id : game.competitions[0].competitors[1].id) : '',
-				})))
-			})
+		if(week !== 99) {
+			fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + weekDates.start + '-' + weekDates.end + '&groups=8')
+				.then((res) => res.json())
+				.then((data) => {
+					setGames(data.events
+					.sort((a: any, b: any) => a.date < b.date ? -1 : 1)
+					.map((game: any) => ({
+						id: game.id,
+						date_long: game.date,
+						date: dayjs(game.date).format('M/D h:mmA'),
+						status: game.status,
+						home: game.competitions[0].competitors[0],
+						away: game.competitions[0].competitors[1],
+						home_rank: game.competitions[0].competitors[0].curatedRank,
+						away_rank: game.competitions[0].competitors[1].curatedRank,
+						broadcast: game.competitions[0].broadcasts.length ? game.competitions[0].broadcasts[0].names[0] : '',
+						winner: game.status.type.description == 'Final' ?
+												(game.competitions[0].competitors[0].winner ? game.competitions[0].competitors[0].id : game.competitions[0].competitors[1].id) : '',
+					})))
+				})
+		}
+		else {
+			// for bowl games we want any games in the Top 25 as well as SEC
+			fetch('http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?limit=1000&dates=' + weekDates.start + '-' + weekDates.end)
+				.then((res) => res.json())
+				.then((data) => {
+					setGames(data.events
+					.sort((a: any, b: any) => a.date < b.date ? -1 : 1)
+					// filter out games where either team does not have a Top 25 ranking or are not in SEC
+					.filter((game: any) => (game.competitions[0].competitors[0].curatedRank.current <= 25
+						|| game.competitions[0].competitors[1].curatedRank.current <= 25) ||
+						(game.competitions[0].competitors[0].team.conferenceId == 8
+						|| game.competitions[0].competitors[1].team.conferenceId == 8))
+					.map((game: any) => ({
+						//TODO add bowl name
+						id: game.id,
+						date_long: game.date,
+						date: dayjs(game.date).format('M/D h:mmA'),
+						status: game.status,
+						home: game.competitions[0].competitors[0],
+						away: game.competitions[0].competitors[1],
+						home_rank: game.competitions[0].competitors[0].curatedRank,
+						away_rank: game.competitions[0].competitors[1].curatedRank,
+						broadcast: game.competitions[0].broadcasts.length ? game.competitions[0].broadcasts[0].names[0] : '',
+						winner: game.status.type.description == 'Final' ?
+												(game.competitions[0].competitors[0].winner ? game.competitions[0].competitors[0].id : game.competitions[0].competitors[1].id) : '',
+					})))
+				})
+		}
 	}
 
 	useEffect(() => {
@@ -92,7 +120,7 @@ export default function ThisWeek({ weekDates }) {
 			const today = dayjs();
 			if(dayjs(today).isAfter(games[0].date_long)) {
 				// if first game of week has started, disable the picks button
-				// setDisableButton(true);
+				setDisableButton(true);
 			}
 		}
 	}, [games]);
